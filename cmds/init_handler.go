@@ -56,12 +56,12 @@ func initHandler(ctx context.Context, args []string, opts *initOptions) error {
 					log.Fatal(err)
 				}
 				for _, file := range files {
-					fmt.Println(file)
 					array := strings.Split(file, ".")
 					err = p.createTemplateFile(fmt.Sprintf("%s/%s.go", modulePath, array[0]), fmt.Sprintf("tml/%s/%s", module, file))
 					if err != nil {
 						log.Fatal("创建文件异常", err)
 					}
+					fmt.Println("create file success", file)
 				}
 			} else {
 				err := p.createTemplateFile(fmt.Sprintf("%s/%s.go", dir, "main"), fmt.Sprintf("tml/%s", "main.tml"))
@@ -72,6 +72,7 @@ func initHandler(ctx context.Context, args []string, opts *initOptions) error {
 				if err != nil {
 					log.Fatal("创建文件异常", err)
 				}
+				fmt.Println("create main.go go.mod success")
 			}
 
 		}(module)
