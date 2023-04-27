@@ -7,15 +7,20 @@ import (
 	"os"
 	"strings"
 	"text/template"
+
+	"github.com/Benny66/gingen/asset"
 )
 
 type modelTemplate struct {
+	Type   string
 	Model  string
 	XModel string
 }
 
 var modelData modelTemplate
 
+// 初始化参数
+// model文件
 func init() {
 	var model string
 	flag.StringVar(&model, "model", "", "model name")
@@ -31,7 +36,7 @@ func init() {
 	}
 
 	modelData.Model = model
-	modelData.XModel = fmt.Sprintf("%s%s", strings.ToLower(string(model[0])), string(model[1:]))
+	modelData.XModel = fmt.Sprintf("%s%s", strings.ToUpper(string(model[0])), string(model[1:]))
 
 }
 
@@ -43,32 +48,46 @@ func main() {
 	if err != nil {
 		log.Fatal("获取当前文件夹失败", err)
 	}
-
-	filePath := fmt.Sprintf("%s/model/%s.go", dir, modelData.XModel)
-	_, err = os.Stat(filePath)
-	if !os.IsNotExist(err) {
-		fmt.Println("File is exist")
-		return
-	}
-	modelByte, err := os.ReadFile("./tml/model.tml")
+	modelData.Type = "dao"
+	err = modelData.createModelTemplateFile(dir, "tml/dao.tml")
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(err)
+	}
+	modelData.Type = "model"
+	err = modelData.createModelTemplateFile(dir, "tml/model.tml")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (m *modelTemplate) createModelTemplateFile(dirPath string, tmlPath string) error {
+	var filePath string = fmt.Sprintf("%s/models/%s.go", dirPath, m.Model)
+	if m.Type == "model" {
+		filePath = fmt.Sprintf("%s/models/%s_model.go", dirPath, m.Model)
+	}
+	_, err := os.Stat(filePath)
+	if !os.IsNotExist(err) {
+		return err
+	}
+	modelByte, err := asset.ReadFile(tmlPath)
+	if err != nil {
+		fmt.Println(1111, tmlPath)
+		return err
 	}
 	template := template.Must(template.New("").Parse(string(modelByte)))
 	var b strings.Builder
 	err = template.Execute(&b, modelData)
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 	file, err := os.Create(filePath)
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 	defer file.Close()
-	n, err := file.Write([]byte(b.String()))
+	_, err = file.Write([]byte(b.String()))
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
-	fmt.Println(n)
-	return
+	return nil
 }
