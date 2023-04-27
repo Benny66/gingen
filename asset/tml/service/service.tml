@@ -1,0 +1,17 @@
+package service
+
+import (
+	"{{.ModName}}/schemas"
+)
+
+type {{.UUserApi}}Interface interface {
+	Test(req *schemas.TestApiReq) (data interface{}, err IServiceError)
+}
+
+var {{.UUserApi}}Service UserInterface = &{{.UserApi}}Service{}
+
+type {{.UserApi}}Service struct{}
+
+func (svr *{{.UserApi}}Service) Test(req *schemas.TestApiReq) (data interface{}, err IServiceError) {
+	return
+}

@@ -1,0 +1,11 @@
+package schemas
+
+type TestApiReq struct {
+	UserName string `form:"username" json:"username"`
+	Password string `form:"password" json:"password"`
+}
+
+type UserInfo struct {
+	UserId uint `form:"userId" json:"userId"`
+	UserName string `form:"username" json:"username"`
+}

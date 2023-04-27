@@ -1,0 +1,142 @@
+package models
+
+import (
+	"gorm.io/gorm"
+)
+
+func (dao *{{.UserApi}}Dao) Create(tx *gorm.DB, data *{{.UUserApi}}Model) (rowsAffected int64, err error) {
+	db := tx.Create(data)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	rowsAffected = db.RowsAffected
+	return
+}
+
+func (dao *{{.UserApi}}Dao) Update(tx *gorm.DB, id uint, data map[string]interface{}) (rowsAffected int64, err error) {
+	db := tx.Model(&{{.UUserApi}}Model{}).Where("id = ?", id).Updates(data)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	rowsAffected = db.RowsAffected
+	return
+}
+
+func (dao *{{.UserApi}}Dao) Delete(tx *gorm.DB, data []int) (rowsAffected int64, err error) {
+	db := tx.Where("id in (?)", data).Delete(&{{.UUserApi}}Model{})
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	rowsAffected = db.RowsAffected
+	return
+}
+
+func (dao *{{.UserApi}}Dao) FindAll() (list []{{.UUserApi}}Model, err error) {
+	db := dao.gm.Find(&list)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+
+func (dao *{{.UserApi}}Dao) FindAllWhere(query interface{}, args ...interface{}) (list []{{.UUserApi}}Model, err error) {
+	db := dao.gm.Where(query, args...).Find(&list)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+
+func (dao *{{.UserApi}}Dao) FindOneWhere(query interface{}, args ...interface{}) (record {{.UUserApi}}Model, err error) {
+	db := dao.gm.Where(query, args...).First(&record)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+
+func (dao *{{.UserApi}}Dao) FindCountWhere(query interface{}, args ...interface{}) (count int64, err error) {
+	db := dao.gm.Model(&{{.UUserApi}}Model{}).Where(query, args...).Count(&count)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+
+func (dao *{{.UserApi}}Dao) FindCount() (count int64, err error) {
+	db := dao.gm.Model(&{{.UUserApi}}Model{}).Count(&count)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+
+func (dao *{{.UserApi}}Dao) Raw(sqlStr string, params ...interface{}) (list []{{.UUserApi}}Model, err error) {
+	db := dao.gm.Debug().Raw(sqlStr, params...).Find(&list)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+func (dao *{{.UserApi}}Dao) WhereQuery(query interface{}, args ...interface{}) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Where(query, args...),
+	}
+
+}
+
+func (dao *{{.UserApi}}Dao) WhereUserNameLike(username string) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Where("username like ?", "%"+username+"%"),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) WhereDisabled(isDisabled int) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Where("is_disabled = ?", isDisabled),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) Paginate(offset, limit int) (count int64, list []{{.UUserApi}}Model, err error) {
+	db := dao.gm.Model(&{{.UUserApi}}Model{}).Count(&count).Offset(offset).Limit(limit).Find(&list)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}
+
+func (dao *{{.UserApi}}Dao) Debug() *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Debug(),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) Offset(offset int) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Offset(offset),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) Limit(limit int) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Limit(limit),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) OrderBy(sortFlag, sortOrder string) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Order(sortFlag + " " + sortOrder),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) Joins(query string, args ...interface{}) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Joins(query, args),
+	}
+}
+
+func (dao *{{.UserApi}}Dao) Preloads(query string) *{{.UserApi}}Dao {
+	return &{{.UserApi}}Dao{
+		dao.gm.Preload(query),
+	}
+}

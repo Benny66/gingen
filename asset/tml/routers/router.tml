@@ -1,0 +1,60 @@
+package routers
+
+import (
+	"net/http"
+
+	"{{.ModName}}/api"
+	"{{.ModName}}/config"
+	"{{.ModName}}/middleware"
+	"{{.ModName}}/format"
+	"{{.ModName}}/log"
+
+	"github.com/gin-contrib/pprof"
+
+	"github.com/gin-gonic/gin"
+)
+
+var Router *router
+
+func init() {
+	Router = NewRouter()
+}
+
+func NewRouter() *router {
+	return &router{}
+}
+
+type router struct{}
+
+func (router *router) Init() *gin.Engine {
+	r := gin.New()
+	//初始化日志
+	log.Init(config.Config.Mode, config.Config.LogExpire)
+
+	gin.SetMode(config.Config.Mode)
+	if gin.IsDebugging() {
+		pprof.Register(r, "/debug/pprof")
+	}
+	r.Use(middleware.LoggerMiddleware())
+	r.Use(middleware.Recover())
+	r.Use(middleware.CrossMiddleware())
+
+	r.NoRoute(routeNotFound)
+	r.NoMethod(methodNotFound)
+	r.StaticFS("/public", http.Dir("public"))
+
+	routerV1(r.Group("/api"))
+	return r
+}
+
+func methodNotFound(context *gin.Context) {
+	format.NewResponseJson(context).Error(404)
+}
+
+func routeNotFound(context *gin.Context) {
+	format.NewResponseJson(context).Error(404)
+}
+
+func routerV1(group *gin.RouterGroup) {
+	group.POST("/test", api.{{.UUserApi}}Api.Test)
+}

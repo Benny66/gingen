@@ -1,0 +1,3 @@
+module {{.ModName}}
+
+go 1.18

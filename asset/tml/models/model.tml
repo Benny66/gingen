@@ -1,0 +1,31 @@
+package models
+
+import (
+	database "github.com/Benny66/ginServer/db"
+	"gorm.io/gorm"
+)
+type {{.UUserApi}}Interface interface {
+    //todo: create your function
+	Create(tx *gorm.DB, data *{{.UUserApi}}Model) (rowsAffected int64, err error)
+	Update(tx *gorm.DB, id uint, data map[string]interface{}) (rowsAffected int64, err error)
+	Delete(tx *gorm.DB, data []int) (rowsAffected int64, err error)
+	FindAllWhere(query interface{}, args ...interface{}) (list []{{.UUserApi}}Model, err error)
+	FindOneWhere(query interface{}, args ...interface{}) (record {{.UUserApi}}Model, err error)
+	FindCountWhere(query interface{}, args ...interface{}) (count int64, err error)
+}
+
+var {{.UUserApi}}Dao {{.UUserApi}}Interface = &{{.UserApi}}Dao{
+	gm: database.Orm.DB(),
+}
+
+type {{.UserApi}}Dao struct {
+	gm *gorm.DB
+}
+
+type {{.UUserApi}}Model struct {
+    //todo create your filed
+}
+
+func (um {{.UUserApi}}Model) TableName() string {
+	return "{{.UserApi}}"
+}

@@ -1,0 +1,20 @@
+package api
+
+import (
+	"{{.ModName}}/schemas"
+	"{{.ModName}}/format"
+	"{{.ModName}}/service"
+
+	"github.com/gin-gonic/gin"
+)
+
+func (api *{{.UserApi}}Api) Test(context *gin.Context) {
+    var req schemas.TestApiReq
+
+    data,err := service.{{.UUserApi}}Service.Test(&req)
+    if err != nil {
+		format.NewResponseJson(context).Error(err.GetErrorCode(), err.GetParams()...)
+		return
+	}
+	format.NewResponseJson(context).Success(data)
+}
