@@ -1,0 +1,25 @@
+package models
+
+import (
+	database "github.com/Benny66/ginServer/db"
+	"gorm.io/gorm"
+)
+type {{.Model}}Interface interface {
+    //todo: create your function
+}
+
+var {{.Model}}Dao {{.Model}}Interface = &{{.XModel}}Dao{
+	gm: database.Orm.DB(),
+}
+
+type {{.XModel}}Dao struct {
+	gm *gorm.DB
+}
+
+type {{.Model}}Model struct {
+    //todo create your filed
+}
+
+func (um {{.Model}}Model) TableName() string {
+	return "{{.Model}}"
+}
