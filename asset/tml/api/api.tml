@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (api *{{.UserApi}}Api) Test(context *gin.Context) {
+func (api *{{.ModuleName}}Api) Test(context *gin.Context) {
     var req schemas.TestApiReq
 
-    data,err := service.{{.UUserApi}}Service.Test(&req)
+    data,err := service.{{.UModuleName}}Service.Test(&req)
     if err != nil {
 		format.NewResponseJson(context).Error(err.GetErrorCode(), err.GetParams()...)
 		return

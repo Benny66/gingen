@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (dao *{{.UserApi}}Dao) Create(tx *gorm.DB, data *{{.UUserApi}}Model) (rowsAffected int64, err error) {
+func (dao *{{.ModuleName}}Dao) Create(tx *gorm.DB, data *{{.UModuleName}}Model) (rowsAffected int64, err error) {
 	db := tx.Create(data)
 	if err = db.Error; db.Error != nil {
 		return
@@ -13,8 +13,8 @@ func (dao *{{.UserApi}}Dao) Create(tx *gorm.DB, data *{{.UUserApi}}Model) (rowsA
 	return
 }
 
-func (dao *{{.UserApi}}Dao) Update(tx *gorm.DB, id uint, data map[string]interface{}) (rowsAffected int64, err error) {
-	db := tx.Model(&{{.UUserApi}}Model{}).Where("id = ?", id).Updates(data)
+func (dao *{{.ModuleName}}Dao) Update(tx *gorm.DB, id uint, data map[string]interface{}) (rowsAffected int64, err error) {
+	db := tx.Model(&{{.UModuleName}}Model{}).Where("id = ?", id).Updates(data)
 	if err = db.Error; db.Error != nil {
 		return
 	}
@@ -22,8 +22,8 @@ func (dao *{{.UserApi}}Dao) Update(tx *gorm.DB, id uint, data map[string]interfa
 	return
 }
 
-func (dao *{{.UserApi}}Dao) Delete(tx *gorm.DB, data []int) (rowsAffected int64, err error) {
-	db := tx.Where("id in (?)", data).Delete(&{{.UUserApi}}Model{})
+func (dao *{{.ModuleName}}Dao) Delete(tx *gorm.DB, data []int) (rowsAffected int64, err error) {
+	db := tx.Where("id in (?)", data).Delete(&{{.UModuleName}}Model{})
 	if err = db.Error; db.Error != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func (dao *{{.UserApi}}Dao) Delete(tx *gorm.DB, data []int) (rowsAffected int64,
 	return
 }
 
-func (dao *{{.UserApi}}Dao) FindAll() (list []{{.UUserApi}}Model, err error) {
+func (dao *{{.ModuleName}}Dao) FindAll() (list []{{.UModuleName}}Model, err error) {
 	db := dao.gm.Find(&list)
 	if err = db.Error; db.Error != nil {
 		return
@@ -39,7 +39,7 @@ func (dao *{{.UserApi}}Dao) FindAll() (list []{{.UUserApi}}Model, err error) {
 	return
 }
 
-func (dao *{{.UserApi}}Dao) FindAllWhere(query interface{}, args ...interface{}) (list []{{.UUserApi}}Model, err error) {
+func (dao *{{.ModuleName}}Dao) FindAllWhere(query interface{}, args ...interface{}) (list []{{.UModuleName}}Model, err error) {
 	db := dao.gm.Where(query, args...).Find(&list)
 	if err = db.Error; db.Error != nil {
 		return
@@ -47,7 +47,7 @@ func (dao *{{.UserApi}}Dao) FindAllWhere(query interface{}, args ...interface{})
 	return
 }
 
-func (dao *{{.UserApi}}Dao) FindOneWhere(query interface{}, args ...interface{}) (record {{.UUserApi}}Model, err error) {
+func (dao *{{.ModuleName}}Dao) FindOneWhere(query interface{}, args ...interface{}) (record {{.UModuleName}}Model, err error) {
 	db := dao.gm.Where(query, args...).First(&record)
 	if err = db.Error; db.Error != nil {
 		return
@@ -55,88 +55,88 @@ func (dao *{{.UserApi}}Dao) FindOneWhere(query interface{}, args ...interface{})
 	return
 }
 
-func (dao *{{.UserApi}}Dao) FindCountWhere(query interface{}, args ...interface{}) (count int64, err error) {
-	db := dao.gm.Model(&{{.UUserApi}}Model{}).Where(query, args...).Count(&count)
+func (dao *{{.ModuleName}}Dao) FindCountWhere(query interface{}, args ...interface{}) (count int64, err error) {
+	db := dao.gm.Model(&{{.UModuleName}}Model{}).Where(query, args...).Count(&count)
 	if err = db.Error; db.Error != nil {
 		return
 	}
 	return
 }
 
-func (dao *{{.UserApi}}Dao) FindCount() (count int64, err error) {
-	db := dao.gm.Model(&{{.UUserApi}}Model{}).Count(&count)
+func (dao *{{.ModuleName}}Dao) FindCount() (count int64, err error) {
+	db := dao.gm.Model(&{{.UModuleName}}Model{}).Count(&count)
 	if err = db.Error; db.Error != nil {
 		return
 	}
 	return
 }
 
-func (dao *{{.UserApi}}Dao) Raw(sqlStr string, params ...interface{}) (list []{{.UUserApi}}Model, err error) {
+func (dao *{{.ModuleName}}Dao) Raw(sqlStr string, params ...interface{}) (list []{{.UModuleName}}Model, err error) {
 	db := dao.gm.Debug().Raw(sqlStr, params...).Find(&list)
 	if err = db.Error; db.Error != nil {
 		return
 	}
 	return
 }
-func (dao *{{.UserApi}}Dao) WhereQuery(query interface{}, args ...interface{}) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) WhereQuery(query interface{}, args ...interface{}) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Where(query, args...),
 	}
 
 }
 
-func (dao *{{.UserApi}}Dao) WhereUserNameLike(username string) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) WhereUserNameLike(username string) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Where("username like ?", "%"+username+"%"),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) WhereDisabled(isDisabled int) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) WhereDisabled(isDisabled int) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Where("is_disabled = ?", isDisabled),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) Paginate(offset, limit int) (count int64, list []{{.UUserApi}}Model, err error) {
-	db := dao.gm.Model(&{{.UUserApi}}Model{}).Count(&count).Offset(offset).Limit(limit).Find(&list)
+func (dao *{{.ModuleName}}Dao) Paginate(offset, limit int) (count int64, list []{{.UModuleName}}Model, err error) {
+	db := dao.gm.Model(&{{.UModuleName}}Model{}).Count(&count).Offset(offset).Limit(limit).Find(&list)
 	if err = db.Error; db.Error != nil {
 		return
 	}
 	return
 }
 
-func (dao *{{.UserApi}}Dao) Debug() *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) Debug() *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Debug(),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) Offset(offset int) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) Offset(offset int) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Offset(offset),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) Limit(limit int) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) Limit(limit int) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Limit(limit),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) OrderBy(sortFlag, sortOrder string) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) OrderBy(sortFlag, sortOrder string) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Order(sortFlag + " " + sortOrder),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) Joins(query string, args ...interface{}) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) Joins(query string, args ...interface{}) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Joins(query, args),
 	}
 }
 
-func (dao *{{.UserApi}}Dao) Preloads(query string) *{{.UserApi}}Dao {
-	return &{{.UserApi}}Dao{
+func (dao *{{.ModuleName}}Dao) Preloads(query string) *{{.ModuleName}}Dao {
+	return &{{.ModuleName}}Dao{
 		dao.gm.Preload(query),
 	}
 }

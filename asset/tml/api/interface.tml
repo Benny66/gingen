@@ -2,10 +2,10 @@ package api
 
 import "github.com/gin-gonic/gin"
 
-type {{.UUserApi}}Interface interface {
+type {{.UModuleName}}Interface interface {
 	Test(context *gin.Context)
 }
 
-var {{.UUserApi}}Api {{.UUserApi}}Interface = &{{.UserApi}}Api{}
+var {{.UModuleName}}Api {{.UModuleName}}Interface = &{{.ModuleName}}Api{}
 
-type {{.UserApi}}Api struct{}
+type {{.ModuleName}}Api struct{}

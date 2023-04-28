@@ -29,6 +29,9 @@ func unmarshalInitOptions(flagSet *pflag.FlagSet) *initOptions {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if modName == "" {
+		log.Fatal("mod name not specified")
+	}
 	o.ModName = modName
 	return o
 }
@@ -48,7 +51,7 @@ func init() {
 	flagSet.SortFlags = false
 	flagSet.String(
 		"mod",
-		"gin-server",
+		"",
 		"新增一个项目并命名初始化mod",
 	)
 }
