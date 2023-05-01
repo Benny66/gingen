@@ -1,4 +1,15 @@
 .idea
+/api/*
+/format/*
+/config/*
+/db/*
+/log/*
+/middleware/*
+/middleware/*
+/models/*
+/routers/*
+/schemas/*
+/service/*
 /models/*
 gingen
 /test/*

@@ -11,7 +11,7 @@ import (
 type modelOptions struct {
 	flagSet *pflag.FlagSet
 	rootPersistentOptions
-	ModelName string
+	Name string
 }
 
 func unmarshalModelOptions(flagSet *pflag.FlagSet) *modelOptions {
@@ -20,7 +20,7 @@ func unmarshalModelOptions(flagSet *pflag.FlagSet) *modelOptions {
 	if err != nil || modelName == "" {
 		log.Fatal("model is not set")
 	}
-	o.ModelName = modelName
+	o.Name = modelName
 	return o
 }
 

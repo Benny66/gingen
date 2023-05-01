@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type {{.UModuleName}}Interface interface {
+	Test(context *gin.Context)
+}
+
+var {{.UModuleName}}Api {{.UModuleName}}Interface = &{{.ModuleName}}Api{}
+
+type {{.ModuleName}}Api struct{}
+
 func (api *{{.ModuleName}}Api) Test(context *gin.Context) {
     var req schemas.TestApiReq
 

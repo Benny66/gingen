@@ -22,15 +22,14 @@ func modelHandler(ctx context.Context, args []string, opts *modelOptions) error 
 	dir = dir + "/models"
 	p = &project{
 		ModName:     modName,
-		ModuleName:  opts.ModelName,
-		UModuleName: strings.ToUpper(string(opts.ModelName[0])) + opts.ModelName[1:],
+		ModuleName:  opts.Name,
+		UModuleName: strings.ToUpper(string(opts.Name[0])) + opts.Name[1:],
 	}
-	fmt.Println(p)
-	err = p.createTemplateFile(fmt.Sprintf("%s/%s.go", dir, opts.ModelName), "tml/models/dao.tml")
+	err = p.createTemplateFile(fmt.Sprintf("%s/%s.go", dir, opts.Name), "tml/models/dao.tml")
 	if err != nil {
 		return err
 	}
-	err = p.createTemplateFile(fmt.Sprintf("%s/%s_model.go", dir, opts.ModelName), "tml/models/model.tml")
+	err = p.createTemplateFile(fmt.Sprintf("%s/%s_model.go", dir, opts.Name), "tml/models/model.tml")
 	if err != nil {
 		return err
 	}
