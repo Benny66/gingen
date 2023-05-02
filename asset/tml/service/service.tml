@@ -4,14 +4,14 @@ import (
 	"{{.ModName}}/schemas"
 )
 
-type {{.UUserApi}}Interface interface {
+type {{.UModuleName}}Interface interface {
 	Test(req *schemas.TestApiReq) (data interface{}, err IServiceError)
 }
 
-var {{.UUserApi}}Service UserInterface = &{{.UserApi}}Service{}
+var {{.UModuleName}}Service UserInterface = &{{.ModuleName}}Service{}
 
-type {{.UserApi}}Service struct{}
+type {{.ModuleName}}Service struct{}
 
-func (svr *{{.UserApi}}Service) Test(req *schemas.TestApiReq) (data interface{}, err IServiceError) {
+func (svr *{{.ModuleName}}Service) Test(req *schemas.TestApiReq) (data interface{}, err IServiceError) {
 	return
 }

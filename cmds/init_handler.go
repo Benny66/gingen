@@ -16,9 +16,9 @@ import (
 var p = &project{}
 
 type project struct {
-	ModName  string
-	UserApi  string
-	UUserApi string
+	ModName     string
+	ModuleName  string
+	UModuleName string
 }
 
 var modules []string = []string{
@@ -38,17 +38,21 @@ var modules []string = []string{
 
 func initHandler(ctx context.Context, args []string, opts *initOptions) error {
 	p = &project{
-		ModName:  opts.ModName,
-		UserApi:  "user",
-		UUserApi: "User",
+		ModName:     opts.ModName,
+		ModuleName:  "user",
+		UModuleName: "User",
 	}
 	var sync sync.WaitGroup
-	var dir string = "./"
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(dir)
 	for _, module := range modules {
 		sync.Add(1)
 		go func(module string) {
 			defer sync.Done()
-			modulePath := dir + module
+			modulePath := dir + "/" + module
 			if module != "main" {
 				fileNotExistsAndCreate(modulePath)
 				files, err := asset.ReadDir(fmt.Sprintf("tml/%s", module))

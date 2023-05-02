@@ -56,5 +56,5 @@ func routeNotFound(context *gin.Context) {
 }
 
 func routerV1(group *gin.RouterGroup) {
-	group.POST("/test", api.{{.UUserApi}}Api.Test)
+	group.POST("/test", api.{{.UModuleName}}Api.Test)
 }
