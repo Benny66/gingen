@@ -20,10 +20,11 @@ func modelHandler(ctx context.Context, args []string, opts *modelOptions) error 
 	}
 	fileNotExistsAndCreate("./models")
 	dir = dir + "/models"
+	lowerCamelCaseName := toLowerCamelCase(opts.Name)
 	p = &project{
 		ModName:     modName,
-		ModuleName:  opts.Name,
-		UModuleName: strings.ToUpper(string(opts.Name[0])) + opts.Name[1:],
+		ModuleName:  lowerCamelCaseName,
+		UModuleName: strings.ToUpper(string(lowerCamelCaseName[0])) + lowerCamelCaseName[1:],
 	}
 	err = p.createTemplateFile(fmt.Sprintf("%s/%s.go", dir, opts.Name), "tml/models/dao.tml")
 	if err != nil {

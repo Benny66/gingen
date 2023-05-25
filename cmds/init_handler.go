@@ -118,3 +118,16 @@ func (p *project) createTemplateFile(filePath, tmlPath string) error {
 	}
 	return nil
 }
+
+func toLowerCamelCase(s string) string {
+	parts := strings.Split(s, "_")
+	if len(parts) == 1 {
+		return strings.ToLower(string(s[0])) + s[1:]
+	}
+	for i := range parts {
+		if i != 0 {
+			parts[i] = strings.Title(parts[i])
+		}
+	}
+	return strings.Join(parts, "")
+}
