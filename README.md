@@ -1,5 +1,23 @@
 # gingen
+命令
+```
+Usage:
+  gingen [command]
 
+Available Commands:
+  api         create a api module
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  init        Init a ginServer module
+  model       create a model/dao module
+
+Flags:
+  -h, --help               help for gingen
+      --log-level string   log level (default "info")
+
+Use "gingen [command] --help" for more information about a command.
+
+```
 初始化项目并编译
 ```
 go mod tidy
