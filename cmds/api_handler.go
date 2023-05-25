@@ -18,10 +18,11 @@ func apiHandler(ctx context.Context, args []string, opts *apiOptions) error {
 	}
 	fileNotExistsAndCreate("./api")
 	dir = dir + "/api"
+	lowerCamelCaseName := toLowerCamelCase(opts.Name)
 	p = &project{
 		ModName:     modName,
-		ModuleName:  opts.Name,
-		UModuleName: strings.ToUpper(string(opts.Name[0])) + opts.Name[1:],
+		ModuleName:  lowerCamelCaseName,
+		UModuleName: strings.ToUpper(string(lowerCamelCaseName[0])) + lowerCamelCaseName[1:],
 	}
 	err = p.createTemplateFile(fmt.Sprintf("%s/%s.go", dir, opts.Name), "tml/api/api.tml")
 	if err != nil {
@@ -29,3 +30,5 @@ func apiHandler(ctx context.Context, args []string, opts *apiOptions) error {
 	}
 	return nil
 }
+
+
