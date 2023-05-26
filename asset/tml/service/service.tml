@@ -5,13 +5,13 @@ import (
 )
 
 type {{.UModuleName}}Interface interface {
-	Test(req *schemas.TestApiReq) (data interface{}, err IServiceError)
+	{{.FuncName}}(req *schemas.{{.FuncName}}ApiReq) (data interface{}, err IServiceError)
 }
 
-var {{.UModuleName}}Service UserInterface = &{{.ModuleName}}Service{}
+var {{.UModuleName}}Service {{.UModuleName}}Interface = &{{.ModuleName}}Service{}
 
 type {{.ModuleName}}Service struct{}
 
-func (svr *{{.ModuleName}}Service) Test(req *schemas.TestApiReq) (data interface{}, err IServiceError) {
+func (svr *{{.ModuleName}}Service) {{.FuncName}}(req *schemas.{{.FuncName}}ApiReq) (data interface{}, err IServiceError) {
 	return
 }

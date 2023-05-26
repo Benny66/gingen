@@ -1,0 +1,4 @@
+package schemas
+
+type {{.FuncName}}ApiReq struct {
+}

@@ -21,7 +21,7 @@ func modelHandler(ctx context.Context, args []string, opts *modelOptions) error 
 	fileNotExistsAndCreate("./models")
 	dir = dir + "/models"
 	lowerCamelCaseName := toLowerCamelCase(opts.Name)
-	p = &project{
+	p := &project{
 		ModName:     modName,
 		ModuleName:  lowerCamelCaseName,
 		UModuleName: strings.ToUpper(string(lowerCamelCaseName[0])) + lowerCamelCaseName[1:],
