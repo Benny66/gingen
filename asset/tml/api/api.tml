@@ -9,17 +9,17 @@ import (
 )
 
 type {{.UModuleName}}Interface interface {
-	Test(context *gin.Context)
+	{{.FuncName}}(context *gin.Context)
 }
 
 var {{.UModuleName}}Api {{.UModuleName}}Interface = &{{.ModuleName}}Api{}
 
 type {{.ModuleName}}Api struct{}
 
-func (api *{{.ModuleName}}Api) Test(context *gin.Context) {
-    var req schemas.TestApiReq
+func (api *{{.ModuleName}}Api) {{.FuncName}}(context *gin.Context) {
+    var req schemas.{{.FuncName}}ApiReq
 
-    data,err := service.{{.UModuleName}}Service.Test(&req)
+    data,err := service.{{.UModuleName}}Service.{{.FuncName}}(&req)
     if err != nil {
 		format.NewResponseJson(context).Error(err.GetErrorCode(), err.GetParams()...)
 		return

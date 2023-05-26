@@ -1,6 +1,7 @@
 package cmds
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"html"
@@ -13,12 +14,14 @@ import (
 	"github.com/Benny66/gingen/asset"
 )
 
-var p = &project{}
+// var p ProjectInterface = &project{}
 
 type project struct {
 	ModName     string
 	ModuleName  string
 	UModuleName string
+	FuncName    string
+	FuncText    []string
 }
 
 var modules []string = []string{
@@ -37,10 +40,13 @@ var modules []string = []string{
 }
 
 func initHandler(ctx context.Context, args []string, opts *initOptions) error {
-	p = &project{
+	p := &project{
 		ModName:     opts.ModName,
 		ModuleName:  "user",
 		UModuleName: "User",
+	}
+	if p.FuncName == "" {
+		p.FuncName = "Test"
 	}
 	var sync sync.WaitGroup
 	dir, err := os.Getwd()
@@ -92,6 +98,11 @@ func fileNotExistsAndCreate(path string) {
 	}
 }
 
+type ProjectInterface interface {
+	createTemplateFile(filePath, tmlPath string) error
+	createTemplateFunc(filePath, tmlPath string, startLine int) error
+}
+
 func (p *project) createTemplateFile(filePath, tmlPath string) error {
 	_, err := os.Stat(filePath)
 	if !os.IsNotExist(err) {
@@ -119,6 +130,57 @@ func (p *project) createTemplateFile(filePath, tmlPath string) error {
 	return nil
 }
 
+func (p *project) createTemplateFunc(filePath, tmlPath string, lineNumber, startLine int) error {
+	_, err := os.Stat(filePath)
+	if os.IsNotExist(err) {
+		return err
+	}
+	fileBytes, err := asset.ReadLinesFromFile(tmlPath, startLine)
+	if err != nil {
+		return err
+	}
+
+	template := template.Must(template.New("").Parse(string(fileBytes)))
+	var b strings.Builder
+	err = template.Execute(&b, p)
+	if err != nil {
+		return err
+	}
+
+	file, err := os.OpenFile(filePath, os.O_RDWR, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	// 创建一个 scanner，用于逐行读取文件内容
+	scanner := bufio.NewScanner(file)
+
+	// 逐行读取文件并存储到一个字符串切片中
+	lines := []string{}
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	// 利用存储的字符串切片，在指定行后插入新行
+	//{{.FuncName}}(context *gin.Context)
+	lines = append(lines[:lineNumber+1], append(p.FuncText, lines[lineNumber+1:]...)...)
+
+	// 将修改后的字符串切片写回到文件中
+	file.Truncate(0)
+	file.Seek(0, 0)
+	writer := bufio.NewWriter(file)
+	for _, line := range lines {
+		_, err := writer.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+	}
+	_, err = writer.WriteString(b.String() + "\n")
+	if err != nil {
+		return err
+	}
+	return writer.Flush()
+}
+
 func toLowerCamelCase(s string) string {
 	parts := strings.Split(s, "_")
 	if len(parts) == 1 {
@@ -128,6 +190,17 @@ func toLowerCamelCase(s string) string {
 		if i != 0 {
 			parts[i] = strings.Title(parts[i])
 		}
+	}
+	return strings.Join(parts, "")
+}
+
+func toUpCamelCase(s string) string {
+	parts := strings.Split(s, "_")
+	if len(parts) == 1 {
+		return strings.Title(parts[0])
+	}
+	for i := range parts {
+		parts[i] = strings.Title(parts[i])
 	}
 	return strings.Join(parts, "")
 }

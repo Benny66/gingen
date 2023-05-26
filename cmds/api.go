@@ -12,6 +12,7 @@ type apiOptions struct {
 	flagSet *pflag.FlagSet
 	rootPersistentOptions
 	Name string
+	Func string
 }
 
 func unmarshalApiOptions(flagSet *pflag.FlagSet) *apiOptions {
@@ -20,7 +21,9 @@ func unmarshalApiOptions(flagSet *pflag.FlagSet) *apiOptions {
 	if err != nil || moduleName == "" {
 		log.Fatal("api name is not set")
 	}
+	funcName, _ := flagSet.GetString("func")
 	o.Name = moduleName
+	o.Func = toUpCamelCase(funcName)
 	return o
 }
 
@@ -38,4 +41,5 @@ func init() {
 	flagSet := apiCmd.Flags()
 	flagSet.SortFlags = false
 	flagSet.String("name", "", "新增一个api接口模块，例如：user,goods,coupon")
+	flagSet.String("func", "", "新增一个函数方法，例如：user,goods,coupon")
 }

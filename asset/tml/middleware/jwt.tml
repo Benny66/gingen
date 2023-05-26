@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"{{.ModName}}/config"
-	"{{.ModName}}/schemas"
 	"{{.ModName}}/format"
 
 	"github.com/gin-gonic/gin"
@@ -31,11 +30,8 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		userInfo := schemas.UserInfo{
-			UserId:   uint(claims["user_id"].(float64)),
-			UserName: claims["username"].(string),
-		}
-		context.Set("user", userInfo)
+		userId := uint(claims["user_id"].(float64))
+		context.Set("user", userId)
 		context.Set("token", token)
 		context.Next()
 	}
